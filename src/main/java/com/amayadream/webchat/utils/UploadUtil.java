@@ -49,6 +49,7 @@ public class UploadUtil {
                         String fileName =  userid + "." + prefix;
                         //定义上传路径,格式为 upload/Amayadream/Amayadream.jpg
                         String path = request.getServletContext().getRealPath("/") + folder + "/" + userid;
+                        System.out.println(path);
                         File localFile = new File(path, fileName);
                         if(!localFile.exists()){
                             localFile.mkdirs();

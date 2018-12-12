@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!--path是web项目的根路径 -->
 <%String path = request.getContextPath();%>
 <!DOCTYPE html>
 <html>
@@ -21,6 +22,7 @@
   </div>
   <div class="clear"> </div>
   <div class="avtar"><img src="<%=path%>/static/source/img/avtar.png" /></div>
+  <!--onsubmit 为表单提交的时候的事件 -->
   <form id="login-form" action="<%=path%>/user/login" method="post" onsubmit="return checkLoginForm()">
     <div class="key">
       <input type="text" id="username" name="userid" placeholder="请输入账号" >

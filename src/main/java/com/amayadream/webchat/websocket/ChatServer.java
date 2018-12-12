@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
+ * 注解是一个类层次的注解，它的功能主要是将目前的类定义成一个websocket服务器端,
+ *  * 注解的值将被用于监听用户连接的终端访问URL地址,客户端可以通过这个URL来连接到WebSocket服务器端
  * websocket服务
  * @author  :  Amayadream
  * @time   :  2016.01.08 09:50
@@ -21,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @ServerEndpoint(value = "/chatServer", configurator = HttpSessionConfigurator.class)
 public class ChatServer {
     private static int onlineCount = 0; //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
-    private static CopyOnWriteArraySet<ChatServer> webSocketSet = new CopyOnWriteArraySet<ChatServer>();
+    private static CopyOnWriteArraySet<ChatServer> webSocketSet = new CopyOnWriteArraySet<ChatServer>();//类似于HashSet
     private Session session;    //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private String userid;      //用户名
     private HttpSession httpSession;    //request的session
