@@ -13,15 +13,16 @@
     <result column="FIRSTTIME" property="firsttime" jdbcType="VARCHAR"/>
     <result column="LASTTIME" property="lasttime" jdbcType="VARCHAR"/>
     <result column="STATUS" property="status" jdbcType="INTEGER"/>
+    <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
   </resultMap>
 
   <sql id="Base_Column_List">
-    USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS
+    USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS, EMAIL
   </sql>
 
   <!-- 查询所有用户 -->
   <select id="selectAll" resultMap="BaseResultMap">
-      SELECT  USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS FROM user
+      SELECT  USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS, EMAIL FROM user
       ORDER BY FIRSTTIME
       LIMIT #{offset}, #{limit}
   </select>
@@ -41,10 +42,11 @@
 
   <!-- 插入用户 -->
   <insert id="insert" parameterType="com.amayadream.webchat.pojo.User">
-    INSERT INTO user (USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS)
+    INSERT INTO user (USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS, EMAIL)
     VALUES (#{userid, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{sex, jdbcType=INTEGER},
     #{age, jdbcType=INTEGER}, #{profilehead, jdbcType=VARCHAR}, #{profile, jdbcType=VARCHAR},
-    #{firsttime, jdbcType=VARCHAR}, #{lasttime, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER})
+    #{firsttime, jdbcType=VARCHAR}, #{lasttime, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER}
+    , #{email, jdbcType=VARCHAR})
   </insert>
 
   <!-- 更新用户 -->
@@ -77,6 +79,9 @@
       </if>
       <if test="status != null and status != ''">
         STATUS = #{status, jdbcType=INTEGER},
+      </if>
+      <if test="email != null and email != ''">
+        EMAIL = #{email, jdbcType=VARCHAR},
       </if>
     </set>
     WHERE USERID = #{userid, jdbcType=VARCHAR}
