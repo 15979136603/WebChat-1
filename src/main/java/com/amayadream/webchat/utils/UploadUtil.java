@@ -48,7 +48,9 @@ public class UploadUtil {
                         //重命名上传后的文件名
                         String fileName =  userid + "." + prefix;
                         //定义上传路径,格式为 upload/Amayadream/Amayadream.jpg
-                        String path = request.getServletContext().getRealPath("/") + folder + "/" + userid;
+                        String path = "E:/apache-tomcat-9.0.8/webapps/upload/webchat/"+userid;
+
+                        //String path = request.getServletContext().getRealPath("/") + folder + "/" + userid;
                         System.out.println(path);
                         File localFile = new File(path, fileName);
                         if(!localFile.exists()){
@@ -56,7 +58,8 @@ public class UploadUtil {
                         }
                         try {
                             file.transferTo(localFile);
-                            file_url = folder + "/" + userid + "/" + fileName;
+                            String imagepath = "/upload/webchat/"+userid;
+                            file_url = imagepath + "/" + fileName;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

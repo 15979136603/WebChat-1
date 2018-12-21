@@ -20,7 +20,7 @@
   </sql>
 
   <!-- 查询所有用户 -->
-  <select id="selectAll" resultMap="BaseResultMap">
+  <select id="selectAll" resultType="com.amayadream.webchat.pojo.User">
       SELECT  USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS FROM user
       ORDER BY FIRSTTIME
       LIMIT #{offset}, #{limit}

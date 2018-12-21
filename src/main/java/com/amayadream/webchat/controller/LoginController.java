@@ -1,5 +1,7 @@
 package com.amayadream.webchat.controller;
 
+import com.amayadream.webchat.dao.ChatRecordDao;
+import com.amayadream.webchat.pojo.ChatRecord;
 import com.amayadream.webchat.pojo.User;
 import com.amayadream.webchat.service.ILogService;
 import com.amayadream.webchat.service.IUserService;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Author :  Amayadream
@@ -24,6 +27,8 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping(value = "/user")
 public class LoginController {
+    @Resource
+    private ChatRecordDao chatRecordDao;
 
     @Resource
     private IUserService userService;
@@ -58,6 +63,7 @@ public class LoginController {
                     user.setLasttime(date.getTime24());
                     userService.update(user);
                     attributes.addFlashAttribute("message", defined.LOGIN_SUCCESS);
+
                     return "redirect:/chat";
                 }
             }
