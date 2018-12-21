@@ -16,7 +16,7 @@
         <div class="am-cf am-padding">
             <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">个人信息</strong> / <small>info</small></div>
         </div>
-        <div class="am-tabs am-margin" data-am-tabs>
+        <div class="am-tabs am-margin">
             <ul class="am-tabs-nav am-nav am-nav-tabs">
                 <li class="am-active"><a href="#tab1">个人信息</a></li>
             </ul>
@@ -55,10 +55,19 @@
                                 ${user.profile}
                             </c:if>
                         </div>
+
                         <div class="am-u-md-3"><b>注册时间</b></div>
                         <div class="am-u-md-3">${user.firsttime}</div>
                         <div class="am-u-md-3"><b>最后登录</b></div>
                         <div class="am-u-md-3">${user.lasttime}</div>
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-md-3"><b>邮箱</b></div>
+                        <div>&nbsp;&nbsp;&nbsp;${user.email}</div>
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-md-3"><b>好友印象</b></div>
+                        <div>&nbsp;&nbsp;&nbsp;1111</div>
                     </div>
                 </div>
             </div>

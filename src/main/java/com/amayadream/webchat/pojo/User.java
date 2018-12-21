@@ -20,11 +20,23 @@ public class User {
     private String firsttime;   //注册时间
     private String lasttime;    //最后登录时间
     private int status;      //账号状态(1正常 0禁用)
+    private String email; //邮箱
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     /**
      * getter&setter
      * @return
      */
+
+
+
     public int getAge() {
         return age;
     }
