@@ -149,6 +149,7 @@ public class UserController {
             String path = user.getProfilehead();
             String rootPath = request.getSession().getServletContext().getRealPath("/");
             String picturePath = rootPath + path;
+            System.out.println(picturePath);
             response.setContentType("image/jpeg; charset=UTF-8");
             ServletOutputStream outputStream = response.getOutputStream();
             FileInputStream inputStream = new FileInputStream(picturePath);
