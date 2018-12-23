@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * NAME   :  WebChat/com.amayadream.webchat.controller
@@ -61,7 +63,16 @@ public class UserController {
         view.addObject("user", user);
         return view;
     }
-
+    /**
+     *  显示好友个人信息页面
+     */
+    @RequestMapping(value = "/info/{userid}", method = RequestMethod.GET)
+    public ModelAndView showUserByUserid(@PathVariable("userid") String userid, @ModelAttribute("userid") String sessionid){
+        ModelAndView view = new ModelAndView("showUser");
+        user = userService.selectUserByUserid(userid);
+        view.addObject("user", user);
+        return view;
+    }
     /**
      * 显示个人信息编辑页面
      * @param userid
@@ -95,7 +106,25 @@ public class UserController {
         }
         return "redirect:/{userid}/config";
     }
-
+    /**
+     * 更新好友印象
+     * @param userid
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/info/{userid}/update", method = RequestMethod.POST)
+    public String  updateFriend(@PathVariable("userid") String userid,  User user, RedirectAttributes attributes,
+                                NetUtil netUtil, LogUtil logUtil, CommonDate date, WordDefined defined, HttpServletRequest request){
+        boolean flag = userService.update(user);
+        if(flag){
+            logService.insert(logUtil.setLog(userid, date.getTime24(), defined.LOG_TYPE_UPDATE, defined.LOG_DETAIL_UPDATE_PROFILE, netUtil.getIpAddress(request)));
+            attributes.addFlashAttribute("message", "["+userid+"]资料更新成功!");
+        }else{
+            attributes.addFlashAttribute("error", "["+userid+"]资料更新失败!");
+        }
+        return "redirect:/info/{userid}";
+    }
     /**
      * 修改密码
      * @param userid
@@ -179,5 +208,16 @@ public class UserController {
             e.printStackTrace();
         }
     }
+/**
+ * 获取单个用户信息
+ */
+@RequestMapping(value = "{userid}/showuserinfo",method = RequestMethod.POST)
+    @ResponseBody
+    public List<User> showuserinfo(@PathVariable("userid") String userid){
+    List<User> users = new ArrayList<>();
+    users.add(userService.selectUserByUserid(userid));
+    return  users;
+}
+
 
 }

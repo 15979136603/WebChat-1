@@ -23,6 +23,7 @@
                 <li class="am-active"><a href="#tab1">基本信息</a></li>
                 <li><a href="#tab2">修改头像</a></li>
                 <li><a href="#tab3">修改密码</a></li>
+                <li><a href="#tab4">好友印象</a> </li>
             </ul>
 
             <div class="am-tabs-bd">
@@ -40,6 +41,13 @@
                             <label for="nickname" class="am-u-sm-2 am-form-label">昵称</label>
                             <div class="am-u-sm-10">
                                 <input type="text" id="nickname" name="nickname" value="${user.nickname}" required placeholder="这里输入你的昵称...">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="email" class="am-u-sm-2 am-form-label">Email</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="email" name="email" value="${user.email}" required placeholder="这里输入你的昵称...">
                             </div>
                         </div>
 
@@ -74,7 +82,7 @@
                         </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-10 am-u-sm-offset-2">
-                                <button type="submit" class="am-btn am-round am-btn-success"><span class="am-icon-send"></span> 提交</button>
+                                <button type="submit" onclick="return updateInfo()"  class="am-btn am-round am-btn-success"><span class="am-icon-send"></span> 提交</button>
                             </div>
                         </div>
                     </form>
@@ -91,7 +99,7 @@
                             <input id="file" type="file" name="file" multiple>
                         </div>
                         <div id="file-list"></div>
-                        <button type="submit" class="am-btn am-round am-btn-success"><span class="am-icon-upload"></span> 上传头像</button>
+                        <button type="submit" onclick="return updateInfo()"  class="am-btn am-round am-btn-success"><span class="am-icon-upload"></span> 上传头像</button>
                         <script>
                             $(function() {
                                 $('#file').on('change', function() {
@@ -131,7 +139,61 @@
 
                         <div class="am-form-group">
                             <div class="am-u-sm-10 am-u-sm-offset-2">
-                                <button type="submit" class="am-btn am-round am-btn-success"><span class="am-icon-send"></span> 提交修改</button>
+                                <button type="submit" onclick="return updateInfo()"  class="am-btn am-round am-btn-success"><span class="am-icon-send"></span> 提交修改</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="am-tab-panel am-fade am-in am-active" id="tab4">
+                    <c:set value="${user}" var="user"/>
+                    <form class="am-form am-form-horizontal" id="information-form" action="${ctx}/${userid}/update" method="post" data-am-validator>
+
+                        <div class="am-form-group">
+                            <label for="impression1" class="am-u-sm-2 am-form-label">好友印象1</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="impression1" name="impression1" value="${user.impression1}">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="impression2" class="am-u-sm-2 am-form-label">好友印象2</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="impression2" name="impression2" value="${user.impression2}">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="impression3" class="am-u-sm-2 am-form-label">好友印象3</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="impression3" name="impression3" value="${user.impression3}">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="impression4" class="am-u-sm-2 am-form-label">好友印象4</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="impression4" name="impression4" value="${user.impression4}">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="impression5" class="am-u-sm-2 am-form-label">好友印象5</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="impression5" name="impression5" value="${user.impression5}">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="impression6" class="am-u-sm-2 am-form-label">好友印象6</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="impression6" name="impression6" value="${user.impression6}">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-10 am-u-sm-offset-2">
+                                <button type="submit" onclick="return updateInfo()"  onclick="return updateInfo()"  class="am-btn am-round am-btn-success"><span class="am-icon-send"></span> 提交</button>
                             </div>
                         </div>
                     </form>
@@ -171,6 +233,47 @@
             });
             return false;
         }
+    }
+    function updateInfo() {
+        var nickname=document.getElementById("nickname").value;
+        var email=document.getElementById("email").value;
+        var profile=document.getElementById("profile").value;
+        var password2=document.getElementById("password2").value;
+        var password3=document.getElementById("password3").value;
+        var impression1=document.getElementById("impression1").value;
+        var impression2=document.getElementById("impression2").value;
+        var impression3=document.getElementById("impression3").value;
+        var impression4=document.getElementById("impression4").value;
+        var impression5=document.getElementById("impression5").value;
+        var impression6=document.getElementById("impression6").value;
+        if(nickname.length>=20){
+            alert("您的昵称有点长\n不宜超过20个字符");
+            return false;
+        }
+        if(email.length>30||email.length<=5){
+            alert("您的邮箱格式不符合要求");
+            return false;
+        }
+        if(profile.length>=50){
+            alert("您的签名太长了，请简短精悍点\n不宜超过50个字符");
+            return false;
+        }
+
+        if(password2.length>=30||password3.length>=30){
+            alert("密码不宜过长超过30个字符");
+            return false;
+        }
+        if(impression1.length>=11||impression2.length>=11||impression3.length>=11||
+            impression4.length>=11||impression5.length>=11||impression6.length>=11){
+            alert("好友印象不宜太长超过11个字符");
+            return false;
+        }
+        if(impression1.length==0||impression2.length==0||impression3.length==0||
+            impression4.length==0||impression5.length==0||impression6.length==0){
+            alert("好友印象有空项\n");
+            return false;
+        }
+        return true;
     }
 </script>
 </body>
