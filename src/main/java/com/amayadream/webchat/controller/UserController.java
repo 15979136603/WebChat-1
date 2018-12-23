@@ -52,6 +52,17 @@ public class UserController {
     }
 
     /**
+     * 显示个人信息页面
+     */
+    @RequestMapping(value = "{userid}", method = RequestMethod.POST)
+    public ModelAndView selectFriendByUserid(@PathVariable("userid") String userid, @ModelAttribute("userid") String sessionid){
+        ModelAndView view = new ModelAndView("/jspModal/addFriend.jsp");
+        user = userService.selectUserByUserid(userid);
+        view.addObject("user", user);
+        return view;
+    }
+
+    /**
      * 显示个人信息编辑页面
      * @param userid
      * @param sessionid

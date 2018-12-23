@@ -2,16 +2,25 @@ package com.amayadream.webchat.websocket;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
+import com.amayadream.webchat.service.IUserService;
+import com.amayadream.webchat.utils.MyEndpointConfigure;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.amayadream.webchat.dao.ChatRecordDao;
 import com.amayadream.webchat.pojo.ChatRecord;
 import com.amayadream.webchat.utils.MyEndpointConfigure;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+
 import java.text.SimpleDateFormat;
+
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -22,10 +31,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author  :  Amayadream
  * @time   :  2016.01.08 09:50
  */
+
 @ServerEndpoint(value = "/chatServer", configurator = MyEndpointConfigure.class)
 public class ChatServer {
+  @Autowired
+//    @Resource
+    private IUserService userService;
 @Autowired
 private ChatRecordDao chatRecordDao;
+
 
     private static int onlineCount = 0; //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static CopyOnWriteArraySet<ChatServer> webSocketSet = new CopyOnWriteArraySet<ChatServer>();//类似于HashSet
@@ -42,11 +56,14 @@ private ChatRecordDao chatRecordDao;
      */
     @OnOpen
     public void onOpen(Session session, EndpointConfig config){
+
         int flag=0;
+
         this.session = session;
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1;
         this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+
         this.userid=(String) httpSession.getAttribute("userid");    //获取当前用户
         //验证SESSION中是否已经存在该用户
         for(Iterator<String> it = list.iterator(); it.hasNext(); ){
@@ -63,6 +80,7 @@ private ChatRecordDao chatRecordDao;
             String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list);
             broadcast(message);     //广播
         }
+
 
     }
 
