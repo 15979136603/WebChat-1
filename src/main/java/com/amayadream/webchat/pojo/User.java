@@ -21,7 +21,60 @@ public class User {
     private String lasttime;    //最后登录时间
     private int status;      //账号状态(1正常 0禁用)
     private String email; //邮箱
+    private String impression1;//好友印象1
+    private String impression2;//好友印象2
+    private String impression3;//好友印象3
+    private String impression4;//好友印象4
+    private String impression5;//好友印象5
+    private String impression6;//好友印象6
 
+    public String getImpression1() {
+        return impression1;
+    }
+
+    public void setImpression1(String impression1) {
+        this.impression1 = impression1;
+    }
+
+    public String getImpression2() {
+        return impression2;
+    }
+
+    public void setImpression2(String impression2) {
+        this.impression2 = impression2;
+    }
+
+    public String getImpression3() {
+        return impression3;
+    }
+
+    public void setImpression3(String impression3) {
+        this.impression3 = impression3;
+    }
+
+    public String getImpression4() {
+        return impression4;
+    }
+
+    public void setImpression4(String impression4) {
+        this.impression4 = impression4;
+    }
+
+    public String getImpression5() {
+        return impression5;
+    }
+
+    public void setImpression5(String impression5) {
+        this.impression5 = impression5;
+    }
+
+    public String getImpression6() {
+        return impression6;
+    }
+
+    public void setImpression6(String impression6) {
+        this.impression6 = impression6;
+    }
     public String getEmail() {
         return email;
     }

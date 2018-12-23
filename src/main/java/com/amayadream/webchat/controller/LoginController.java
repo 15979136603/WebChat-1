@@ -4,11 +4,10 @@ import com.amayadream.webchat.dao.ChatRecordDao;
 import com.amayadream.webchat.pojo.User;
 import com.amayadream.webchat.service.ILogService;
 import com.amayadream.webchat.service.IUserService;
-import com.amayadream.webchat.utils.CommonDate;
-import com.amayadream.webchat.utils.LogUtil;
-import com.amayadream.webchat.utils.NetUtil;
-import com.amayadream.webchat.utils.WordDefined;
+import com.amayadream.webchat.service.VistorService;
+import com.amayadream.webchat.utils.*;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Random;
 
 /**
  * Author :  Amayadream
@@ -32,8 +32,10 @@ import java.text.SimpleDateFormat;
 @RequestMapping(value = "/user")
 public class LoginController {
     @Resource
-    private ChatRecordDao chatRecordDao;
+    private VistorService vistorService;
 
+    @Resource
+    private ChatRecordDao chatRecordDao;
 
     @Resource
     private IUserService userService;
@@ -74,23 +76,28 @@ public class LoginController {
             }
         }
     }
+
     @RequestMapping(value = "/logout")
     public String logout(HttpSession session, RedirectAttributes attributes, WordDefined defined) {
+        String userid = session.getAttribute("userid").toString();
+        if (userService.selectUserByUserid(userid).getStatus() == 2) {
+            vistorService.logoutvistor(userService.selectUserByUserid(userid));
+        }
         session.removeAttribute("userid");
         session.removeAttribute("login_status");
         attributes.addFlashAttribute("message", defined.LOGOUT_SUCCESS);
         return "redirect:/user/login";
     }
 
-    @RequestMapping(value = "/register",method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(@RequestParam("username") String username,
                            @RequestParam("userPassword") String userPassword,
                            @RequestParam("userPhone") String age,
                            @RequestParam("userEmail") String userEmail,
                            @RequestParam("truesex") String sex, Model model) {
-        String pro="upload/";
-        pro+=username+"/"+username+".jpg";
-        Date day=new Date();
+        String pro = "upload/";
+        pro += username + "/" + username + ".jpg";
+        Date day = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         User user = new User();
         user.setProfilehead(pro);
@@ -102,15 +109,40 @@ public class LoginController {
         user.setAge(Integer.parseInt((age)));
         user.setEmail(userEmail);
         user.setSex(Integer.parseInt(sex));
-        if(userService.selectUserByUserid(username)!= null) {
-            model.addAttribute("mes","用户名重复");
+        if (userService.selectUserByUserid(username) != null) {
+            model.addAttribute("mes", "用户名重复");
             return "register";
-        };
+        }
+        ;
         userService.insert(user);
         return "login";
     }
-    @RequestMapping(value = "/register",method = RequestMethod.GET)
-    public String register(){
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String register() {
         return "register";
+    }
+
+    @RequestMapping(value = "/visitorlogin")
+    public String Visitorlogin(HttpSession session, RedirectAttributes attributes, WordDefined defined, CommonDate date, LogUtil logUtil, NetUtil netUtil, HttpServletRequest request) {
+        int number = (int)Math.random()*1000;
+        String name = "游客"+Integer.toString(number);
+        User user = new User();
+        user.setStatus(2);
+        user.setUserid(name);
+        while (userService.selectUserByUserid(name)!=null){
+            number+=1;
+            name = "游客"+Integer.toString(number);
+        }
+        user.setUserid(name);
+        userService.insert(user);
+
+        session.setAttribute("userid", name);
+        session.setAttribute("login_status", true);
+        user.setLasttime(date.getTime24());
+        userService.update(user);
+        attributes.addFlashAttribute("message", defined.LOGIN_SUCCESS);
+
+        return "redirect:/chat";
     }
 }

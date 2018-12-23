@@ -20,4 +20,14 @@ public class ChatRecordServiceImpl implements ChatRecordService {
     public int insertChatRecordByid(ChatRecord chatRecord) {
         return chatRecordDao.insertChatRecordByid(chatRecord);
     }
+
+    @Override
+    public int deleteChatRecordByFirstPerson(String firstperson) {
+        return chatRecordDao.deleteChatRecordByFirstPerson(firstperson);
+    }
+
+    @Override
+    public int deleteChatRecordBySecondPerson(String secondperson) {
+        return chatRecordDao.deleteChatRecordBySecondPerson(secondperson);
+    }
 }

@@ -21,5 +21,25 @@ public interface ChatRecordDao {
      */
      int insertChatRecordByid(ChatRecord chatRecord);
 
+    /**
+     * 根据双方名字删除聊天记录
+     * @param firstperson
+     * @param secondperson
+     * @return
+     */
      int deleteChatRecordByid(@Param("firstperson") String firstperson, @Param("secondperson") String secondperson);
+
+    /**
+     * 根据第一人名字删除聊天记录
+     * @param firstperson
+     * @return
+     */
+     int deleteChatRecordByFirstPerson(String firstperson);
+
+    /**
+     * 根据第二人名字删除聊天记录
+     * @param secondperson
+     * @return
+     */
+     int deleteChatRecordBySecondPerson(String secondperson);
 }

@@ -34,5 +34,24 @@ public class FileUtil {
         String prefix=fileName.substring(fileName.lastIndexOf(".")+1);
         return prefix;
     }
+//    public boolean deleteFile(String userid){
+//        String path = "E:/apache-tomcat-9.0.8/webapps/upload/webchat/";
+//        File dirFile = new File(path+userid);
+//        if (!dirFile.exists()) {
+//            return false;
+//        }
+//
+//        if (dirFile.isFile()) {
+//            return dirFile.delete();
+//        } else {
+//
+//            for (File file : dirFile.listFiles()) {
+//                deleteFile(file);
+//            }
+//        }
+//
+//        return dirFile.delete();
+//
+//    }
 
 }

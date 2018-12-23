@@ -14,16 +14,24 @@
     <result column="LASTTIME" property="lasttime" jdbcType="VARCHAR"/>
     <result column="STATUS" property="status" jdbcType="INTEGER"/>
     <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+    <result column="IMPRESSION1" property="impression1" jdbcType="VARCHAR"/>
+    <result column="IMPRESSION2" property="impression2" jdbcType="VARCHAR"/>
+    <result column="IMPRESSION3" property="impression3" jdbcType="VARCHAR"/>
+    <result column="IMPRESSION4" property="impression4" jdbcType="VARCHAR"/>
+    <result column="IMPRESSION5" property="impression5" jdbcType="VARCHAR"/>
+    <result column="IMPRESSION6" property="impression6" jdbcType="VARCHAR"/>
   </resultMap>
 
   <sql id="Base_Column_List">
-    USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS, EMAIL
+    USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS, EMAIL,IMPRESSION1,IMPRESSION2,IMPRESSION3,
+    IMPRESSION4,IMPRESSION5,IMPRESSION6
   </sql>
 
   <!-- 查询所有用户 -->
   <select id="selectAll" resultMap="BaseResultMap">
       SELECT  USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS, EMAIL FROM user
-      ORDER BY FIRSTTIME
+      ORDER BY FIRSTTIME,IMPRESSION1,IMPRESSION2,IMPRESSION3,
+    IMPRESSION4,IMPRESSION5,IMPRESSION6
       LIMIT #{offset}, #{limit}
   </select>
 
@@ -56,10 +64,13 @@
 
   <!-- 插入用户 -->
   <insert id="insert" parameterType="com.amayadream.webchat.pojo.User">
-    INSERT INTO user (USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS, EMAIL)
+    INSERT INTO user (USERID, PASSWORD, NICKNAME, SEX, AGE, PROFILEHEAD, PROFILE, FIRSTTIME, LASTTIME, STATUS, EMAIL,IMPRESSION1,IMPRESSION2,IMPRESSION3,
+    IMPRESSION4,IMPRESSION5,IMPRESSION6)
     VALUES (#{userid, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{sex, jdbcType=INTEGER},
     #{age, jdbcType=INTEGER}, #{profilehead, jdbcType=VARCHAR}, #{profile, jdbcType=VARCHAR},
-    #{firsttime, jdbcType=VARCHAR}, #{lasttime, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER}
+    #{firsttime, jdbcType=VARCHAR}, #{lasttime, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER},
+     #{impression1,jdbcType=VARCHAR},#{impression2,jdbcType=VARCHAR},#{impression3,jdbcType=VARCHAR},
+    #{impression4,jdbcType=VARCHAR},#{impression5,jdbcType=VARCHAR},#{impression6,jdbcType=VARCHAR}
     , #{email, jdbcType=VARCHAR})
   </insert>
 
@@ -102,6 +113,24 @@
       </if>
       <if test="email != null and email != ''">
         EMAIL = #{email, jdbcType=VARCHAR},
+      </if>
+      <if test="impression1!=null and impression1 !=''">
+        IMPRESSION1=#{impression1,jdbcType=VARCHAR},
+      </if>
+      <if test="impression2!=null and impression2 !=''">
+        IMPRESSION2=#{impression2,jdbcType=VARCHAR},
+      </if>
+      <if test="impression3!=null and impression3 !=''">
+        IMPRESSION3=#{impression3,jdbcType=VARCHAR},
+      </if>
+      <if test="impression4!=null and impression4 !=''">
+        IMPRESSION4=#{impression4,jdbcType=VARCHAR},
+      </if>
+      <if test="impression5!=null and impression5 !=''">
+        IMPRESSION5=#{impression5,jdbcType=VARCHAR},
+      </if>
+      <if test="impression6!=null and impression6 !=''">
+        IMPRESSION6=#{impression6,jdbcType=VARCHAR},
       </if>
     </set>
     WHERE USERID = #{userid, jdbcType=VARCHAR}
