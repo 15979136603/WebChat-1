@@ -73,7 +73,7 @@ public class LoginController {
                 }
             }
         }
-
+    }
     @RequestMapping(value = "/logout")
     public String logout(HttpSession session, RedirectAttributes attributes, WordDefined defined) {
         session.removeAttribute("userid");
