@@ -5,14 +5,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>WebChat | 登陆</title>
+  <title>NCU Friends | 登陆</title>
   <link href="<%=path%>/static/source/css/login.css" rel='stylesheet' type='text/css' />
   <script src="<%=path%>/static/plugins/jquery/jquery-2.1.4.min.js"></script>
   <script src="<%=path%>/static/plugins/layer/layer.js"></script>
 </head>
 <body>
 
-<h1>WebChat</h1>
+<h1>NCU Friends</h1>
 <div class="login-form">
   <div class="close"> </div>
   <div class="head-info">
@@ -35,9 +35,19 @@
       <input type="submit" id="submit" value="Login" >
     </div>
   </form>
+  <form id="register" action="<%=path%>/user/register">
+    <div class="signin">
+      <input type="button" id="button" value="Register" onclick="resgister()" >
+    </div>
+  </form>
 </div>
 
 <script>
+  function resgister() {
+      $("#register").submit();
+      //window.location.href="register";
+  }
+
   $(function(){
     <c:if test="${not empty param.timeout}">
       layer.msg('连接超时,请重新登陆!', {

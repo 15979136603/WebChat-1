@@ -2,15 +2,25 @@ package com.amayadream.webchat.websocket;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
 import com.amayadream.webchat.service.IUserService;
 import com.amayadream.webchat.utils.MyEndpointConfigure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.amayadream.webchat.dao.ChatRecordDao;
+import com.amayadream.webchat.pojo.ChatRecord;
+import com.amayadream.webchat.utils.MyEndpointConfigure;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+
+import java.text.SimpleDateFormat;
+
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -21,12 +31,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author  :  Amayadream
  * @time   :  2016.01.08 09:50
  */
-@Component
+
 @ServerEndpoint(value = "/chatServer", configurator = MyEndpointConfigure.class)
 public class ChatServer {
-@Autowired
+  @Autowired
 //    @Resource
     private IUserService userService;
+@Autowired
+private ChatRecordDao chatRecordDao;
+
 
     private static int onlineCount = 0; //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static CopyOnWriteArraySet<ChatServer> webSocketSet = new CopyOnWriteArraySet<ChatServer>();//类似于HashSet
@@ -43,37 +56,32 @@ public class ChatServer {
      */
     @OnOpen
     public void onOpen(Session session, EndpointConfig config){
-//        int flag = 0;
+
+        int flag=0;
+
         this.session = session;
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1;
         this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
-        this.userid=(String) httpSession.getAttribute("userid");
-//        for(Iterator<String> it = list.iterator(); it.hasNext(); ){
-//            if(it.next()==this.userid){
-//                flag=1;
-//            }
-//        }
-//        if(flag==1){
-//            friendlist = userService.selectAllFriend(userid);
-//            String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list,friendlist);
-//            broadcast(message);     //广播
-//        }else{
-//            list.add(userid);           //将用户名加入在线列表
-//            friendlist = userService.selectAllFriend(userid);
-//            routetab.put(userid, session);   //将用户名和session绑定到路由表
-//            String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list,friendlist);
-//            broadcast(message);     //广播
-//        }
+
+        this.userid=(String) httpSession.getAttribute("userid");    //获取当前用户
+        //验证SESSION中是否已经存在该用户
+        for(Iterator<String> it = list.iterator(); it.hasNext(); ){
+           if(it.next()==this.userid){
+               flag=1;
+           }
+        }
+        if(flag==1){
+            String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list);
+            broadcast(message);     //广播
+        }else{
+            list.add(userid);           //将用户名加入在线列表
+            routetab.put(userid, session);   //将用户名和session绑定到路由表
+            String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list);
+            broadcast(message);     //广播
+        }
 
 
-        System.out.println(userid);//获取当前用户
-        list.add(userid);           //将用户名加入在线列表
-
-        routetab.put(userid, session);   //将用户名和session绑定到路由表
-        String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list);
-        System.out.println(message);
-        broadcast(message);     //广播
     }
 
     /**
@@ -81,6 +89,8 @@ public class ChatServer {
      */
     @OnClose
     public void onClose(){
+
+//        httpSession.removeAttribute("userid");//在默认情况下，session对象在关闭浏览器后并不是立刻被销毁，因此，为了考虑系统的安全性，在用户退出时，需要即刻清除session对象，防止他人盗用session对象中的信息。
         webSocketSet.remove(this);  //从set中删除
         subOnlineCount();           //在线数减1
         list.remove(userid);        //从在线列表移除这个用户
@@ -104,6 +114,21 @@ public class ChatServer {
             singleSend(_message, (Session) routetab.get(message.get("from")));      //发送给自己,这个别忘了
             for(String user : userlist){
                 if(!user.equals(message.get("from"))){
+                    ChatRecord chatRecord = new ChatRecord();
+                    chatRecord.setFirstperson(message.get("from").toString());
+                    chatRecord.setSecondperson(user);
+                    String mes =message.get("content").toString();
+                    chatRecord.setContent(message.get("content").toString());
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    chatRecord.setTime(df.format(new Date()));
+                    chatRecord.setState("1");
+                    chatRecordDao.insertChatRecordByid(chatRecord);
+                    chatRecord.setFirstperson(user);
+                    chatRecord.setSecondperson(message.get("from").toString());
+                    chatRecord.setContent(message.get("content").toString());
+                    chatRecord.setTime(df.format(new Date()));
+                    chatRecord.setState("2");
+                    chatRecordDao.insertChatRecordByid(chatRecord);
                     singleSend(_message, (Session) routetab.get(user));     //分别发送给每个指定用户
                 }
             }
@@ -124,14 +149,19 @@ public class ChatServer {
      * @param message
      */
     public void broadcast(String message){
-        for(ChatServer chat: webSocketSet){
-            try {
-                chat.session.getBasicRemote().sendText(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-                continue;
-            }
+
+        for(Iterator<String> it = list.iterator(); it.hasNext(); ){
+            singleSend(message, (Session) routetab.get(it.next()));
         }
+
+//        for(ChatServer chat: webSocketSet){
+//            try {
+//                chat.session.getBasicRemote().sendText(message);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                continue;
+//            }
+//        }
     }
 
     /**

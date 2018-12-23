@@ -47,6 +47,20 @@ body a,form li,input[type="submit"],input[type="text"],.sixth-login input[type="
 	-moz-transition: 0.1s all;
 	-o-transition: 0.1s all;
 }
+
+/*#sex{*/
+	/*width: 70%;*/
+	/*padding: 1em 2em 1em 3em;*/
+	/*color: #9199aa;*/
+	/*font-size: 18px;*/
+	/*outline: none;*/
+	/*background: url(../img/sex.png) no-repeat 10px 15px;*/
+	/*border: none;*/
+	/*font-weight: 100;*/
+	/*border-bottom: 1px solid#484856;*/
+	/*margin-top: 2em;*/
+/*}*/
+
 /*--close--*/
 .close{
 background: url('../img/close.png') no-repeat 0px 0px;
@@ -116,7 +130,7 @@ input[type="text"] {
 	  border-bottom: 1px solid#484856;
 	  margin-top: 2em;
 }
- input[type="password"]{
+input[type="password"]{
 	  width: 70%;
 	  padding: 1em 2em 1em 3em;
 	  color: #dd3e3e;
@@ -136,14 +150,14 @@ input[type="submit"]{
   background: #3ea751;
   width: 100%;
   padding: 18px 0;
-  border-bottom-left-radius: 15px;
-	-webkit-border-bottom-left-radius: 15px;
-	-moz-border-bottom-left-radius: 15px;
-	-o-border-bottom-left-radius: 15px;
-	border-bottom-right-radius: 15px;
-	-webkit-border-bottom-right-radius: 15px;
-	-moz-border-bottom-right-radius: 15px;
-	-o-border-bottom-right-radius: 15px;
+  /*border-bottom-left-radius: 15px;*/
+	/*-webkit-border-bottom-left-radius: 15px;*/
+	/*-moz-border-bottom-left-radius: 15px;*/
+	/*-o-border-bottom-left-radius: 15px;*/
+	/*!*border-bottom-right-radius: 15px;*!*/
+	/*-webkit-border-bottom-right-radius: 15px;*/
+	/*-moz-border-bottom-right-radius: 15px;*/
+	/*-o-border-bottom-right-radius: 15px;*/
 	cursor: pointer;
 }
 input[type="submit"]:hover {
@@ -161,6 +175,41 @@ input[type="submit"]:hover {
 	-moz-transition: 1s all;
 	-o-transition: 1s all;
 }
+
+input[type="button"]{
+	font-size: 30px;
+	color: #fff;
+	outline: none;
+	border: none;
+	background: #3ea751;
+	border-bottom-left-radius: 15px;
+	-webkit-border-bottom-left-radius: 15px;
+	-moz-border-bottom-left-radius: 15px;
+	-o-border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	-webkit-border-bottom-right-radius: 15px;
+	-moz-border-bottom-right-radius: 15px;
+	-o-border-bottom-right-radius: 15px;
+	width: 100%;
+	padding: 18px 0;
+	cursor: pointer;
+}
+input[type="button"]:hover {
+	background: #ff2775;
+	border-bottom-left-radius: 15px;
+	-webkit-border-bottom-left-radius: 15px;
+	-moz-border-bottom-left-radius: 15px;
+	-o-border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	-webkit-border-bottom-right-radius: 15px;
+	-moz-border-bottom-right-radius: 15px;
+	-o-border-bottom-right-radius: 15px;
+	transition: 1s all;
+	-webkit-transition: 1s all;
+	-moz-transition: 1s all;
+	-o-transition: 1s all;
+}
+
 label.lbl-1 {
   background: #6756ea;
   width: 20px;
