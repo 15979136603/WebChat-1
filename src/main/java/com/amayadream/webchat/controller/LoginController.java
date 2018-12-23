@@ -52,17 +52,17 @@ public class LoginController {
                     attributes.addFlashAttribute("error", defined.LOGIN_USERID_DISABLED);
                     return "redirect:/user/login";
                 } else {
-                    logService.insert(logUtil.setLog(userid, date.getTime24(), defined.LOG_TYPE_LOGIN, defined.LOG_DETAIL_USER_LOGIN, netUtil.getIpAddress(request)));
-                    session.setAttribute("userid", userid);
-                    session.setAttribute("login_status", true);
-                    user.setLasttime(date.getTime24());
-                    userService.update(user);
-                    attributes.addFlashAttribute("message", defined.LOGIN_SUCCESS);
-                    return "redirect:/chat";
+                        logService.insert(logUtil.setLog(userid, date.getTime24(), defined.LOG_TYPE_LOGIN, defined.LOG_DETAIL_USER_LOGIN, netUtil.getIpAddress(request)));
+                        session.setAttribute("userid", userid);
+                        session.setAttribute("login_status", true);
+                        user.setLasttime(date.getTime24());
+                        userService.update(user);
+                        attributes.addFlashAttribute("message", defined.LOGIN_SUCCESS);
+                        return "redirect:/chat";
+                    }
                 }
             }
         }
-    }
 
     @RequestMapping(value = "/logout")
     public String logout(HttpSession session, RedirectAttributes attributes, WordDefined defined) {

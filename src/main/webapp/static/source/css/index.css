@@ -1,0 +1,43 @@
+.am-panel-title{
+    display: inline;
+}
+
+
+.add-btn{
+    margin-top: 5px;
+    float:right;
+    width:16px;
+    height: 16px;
+    border:0;
+    background: url('../images/add.png');
+    /*消除button点击后的蓝色边框*/
+    outline: none;
+    box-shadow: none;
+}
+
+.delete-btn{
+    margin-top: 5px;
+    float:right;
+    width:16px;
+    height: 16px;
+    border:0;
+    background: url('../images/delete.png') no-repeat;
+    /*消除button点击后的蓝色边框*/
+    outline: none;
+    box-shadow: none;
+}
+
+.avatar{
+    float: left;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    margin-right: 10px;
+}
+
+.info{
+    width: 100px;
+    height: 50px;
+    background-color: #ccc;
+}

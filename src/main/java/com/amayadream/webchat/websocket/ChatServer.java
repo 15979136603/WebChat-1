@@ -2,15 +2,16 @@ package com.amayadream.webchat.websocket;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.amayadream.webchat.service.IUserService;
+import com.amayadream.webchat.utils.MyEndpointConfigure;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -20,8 +21,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author  :  Amayadream
  * @time   :  2016.01.08 09:50
  */
-@ServerEndpoint(value = "/chatServer", configurator = HttpSessionConfigurator.class)
+@Component
+@ServerEndpoint(value = "/chatServer", configurator = MyEndpointConfigure.class)
 public class ChatServer {
+@Autowired
+//    @Resource
+    private IUserService userService;
+
     private static int onlineCount = 0; //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static CopyOnWriteArraySet<ChatServer> webSocketSet = new CopyOnWriteArraySet<ChatServer>();//类似于HashSet
     private Session session;    //与某个客户端的连接会话，需要通过它来给客户端发送数据
@@ -37,14 +43,36 @@ public class ChatServer {
      */
     @OnOpen
     public void onOpen(Session session, EndpointConfig config){
+//        int flag = 0;
         this.session = session;
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1;
         this.httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
-        this.userid=(String) httpSession.getAttribute("userid");    //获取当前用户
+        this.userid=(String) httpSession.getAttribute("userid");
+//        for(Iterator<String> it = list.iterator(); it.hasNext(); ){
+//            if(it.next()==this.userid){
+//                flag=1;
+//            }
+//        }
+//        if(flag==1){
+//            friendlist = userService.selectAllFriend(userid);
+//            String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list,friendlist);
+//            broadcast(message);     //广播
+//        }else{
+//            list.add(userid);           //将用户名加入在线列表
+//            friendlist = userService.selectAllFriend(userid);
+//            routetab.put(userid, session);   //将用户名和session绑定到路由表
+//            String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list,friendlist);
+//            broadcast(message);     //广播
+//        }
+
+
+        System.out.println(userid);//获取当前用户
         list.add(userid);           //将用户名加入在线列表
+
         routetab.put(userid, session);   //将用户名和session绑定到路由表
         String message = getMessage("[" + userid + "]加入聊天室,当前在线人数为"+getOnlineCount()+"位", "notice",  list);
+        System.out.println(message);
         broadcast(message);     //广播
     }
 

@@ -3,6 +3,7 @@ package com.amayadream.webchat.serviceImpl;
 import com.amayadream.webchat.dao.IUserDao;
 import com.amayadream.webchat.pojo.User;
 import com.amayadream.webchat.service.IUserService;
+import org.junit.Test;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,8 +26,18 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public List<String> selectAllFriend(String userid) {
+        return userDao.selectAllFriend(userid);
+    }
+
+    @Override
     public User selectUserByUserid(String userid) {
         return userDao.selectUserByUserid(userid);
+    }
+
+    @Override
+    public List<User>  selectUsers(String userid) {
+        return userDao.selectUsers(userid);
     }
 
     @Override
@@ -41,6 +52,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public boolean insertFriend(String userid,String friendid) {
+        return userDao.insertFriend(userid,friendid);
+    }
+
+    @Override
     public boolean update(User user) {
         return userDao.update(user);
     }
@@ -48,5 +64,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     public boolean delete(String userid) {
         return userDao.delete(userid);
+    }
+
+    @Override
+    public boolean deleteFriend(String userid,String friendid) {
+        return userDao.deleteFriend(userid,friendid);
     }
 }

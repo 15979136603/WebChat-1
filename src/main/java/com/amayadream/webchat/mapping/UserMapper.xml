@@ -26,6 +26,13 @@
       LIMIT #{offset}, #{limit}
   </select>
 
+  <!-- 根据用户id查询所有好友 -->
+  <select id="selectAllFriend" resultType="String" parameterType="string">
+      SELECT  u.USERID FROM user u,friendlist f
+      WHERE u.userid = f.friendid AND f.userid = #{userid}
+      order by firsttime
+  </select>
+
   <!-- 根据用户id查询用户 -->
   <select id="selectUserByUserid" resultMap="BaseResultMap" parameterType="string">
     SELECT <include refid="Base_Column_List"/>
@@ -33,7 +40,14 @@
     WHERE USERID = #{userid, jdbcType=VARCHAR}
   </select>
 
-  <!-- 根据用户id查询用户 -->
+  <!-- 根据用户id模糊查询用户 -->
+  <select id="selectUsers" resultType="com.amayadream.webchat.pojo.User" parameterType="string">
+    SELECT *
+    FROM user
+    WHERE USERID like "%"#{userid}"%"
+  </select>
+
+  <!-- 根据用户id查询用户数量 -->
   <select id="selectCount" resultMap="BaseResultMap" >
     SELECT COUNT(*) USERID
     FROM user
@@ -45,6 +59,12 @@
     VALUES (#{userid, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{sex, jdbcType=INTEGER},
     #{age, jdbcType=INTEGER}, #{profilehead, jdbcType=VARCHAR}, #{profile, jdbcType=VARCHAR},
     #{firsttime, jdbcType=VARCHAR}, #{lasttime, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER})
+  </insert>
+
+  <!-- 插入朋友关系 -->
+  <insert id="insertFriend" parameterType="String">
+    INSERT INTO friendlist (userid,friendid)
+    VALUES (#{0, jdbcType=VARCHAR}, #{1, jdbcType=VARCHAR})
   </insert>
 
   <!-- 更新用户 -->
@@ -86,6 +106,12 @@
   <delete id="delete" parameterType="string">
     DELETE FROM user
     WHERE USERID = #{userid, jdbcType=VARCHAR}
+  </delete>
+
+  <!-- 删除朋友关系 -->
+  <delete id="deleteFriend" parameterType="String">
+    DELETE FROM friendlist
+    WHERE userid = #{0, jdbcType=VARCHAR} AND friendid = #{1, jdbcType=VARCHAR}
   </delete>
 
 </mapper>

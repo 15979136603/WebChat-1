@@ -5,9 +5,11 @@
 <head>
     <title>WebChat | 聊天</title>
     <jsp:include page="include/commonfile.jsp"/>
+    <%--自定义样式覆盖amaze默认样式--%>
+    <link href="${ctx}/static/source/css/index.css" rel='stylesheet' type='text/css' />
     <script src="${ctx}/static/plugins/sockjs/sockjs.js"></script>
 </head>
-<body>
+<body onload="getFriendList()">
 <jsp:include page="include/header.jsp"/>
 <div class="am-cf admin-main">
     <jsp:include page="include/sidebar.jsp"/>
@@ -46,6 +48,12 @@
                 <li>图灵机器人 <button class="am-btn am-btn-xs am-btn-danger" id="tuling" data-am-button>未上线</button></li>
             </ul>
             <ul class="am-list am-list-static am-list-striped" id="list">
+            </ul>
+            <div class="am-panel-hd">
+                <h3 class="am-panel-title">好友列表 [<span id="friendnum"></span>]</h3>
+                <button class="add-btn"  onclick="addFriend()"></button>
+            </div>
+            <ul class="am-list am-list-static am-list-striped" id="friendlist">
             </ul>
         </div>
     </div>
@@ -217,6 +225,9 @@
         if(message.list != null && message.list != undefined){      //在线列表
             showOnline(message.list);
         }
+        if(message.friendlist != null && message.friendlist != undefined){      //好友列表
+            showFriend(message.friendlist);
+        }
     }
 
     /**
@@ -250,13 +261,51 @@
         $.each(list, function(index, item){     //添加私聊按钮
             var li = "<li>"+item+"</li>";
             if('${userid}' != item){    //排除自己
-                li = "<li>"+item+" <button type=\"button\" class=\"am-btn am-btn-xs am-btn-primary am-round\" onclick=\"addChat('"+item+"');\"><span class=\"am-icon-phone\"><span> 私聊</button></li>";
+                li = "<li><img width='40px' height='40px' class='am-comment-avatar' src='${ctx}/static/source/img/avtar.png'>"+item+" <button type=\"button\" class=\"am-btn am-btn-xs am-btn-primary am-round\" onclick=\"addChat('"+item+"');\"><span class=\"am-icon-phone\"><span> 私聊</button></li>";
             }
             $("#list").append(li);
         });
         $("#onlinenum").text($("#list li").length);     //获取在线人数
     }
 
+    /**
+     * 展示好友列表
+     */
+    function getFriendList() {
+        var friendlist;
+        $.ajax({
+            type: 'POST',
+            url: '/friend/getFriend?userid=${userid}',
+            // data: data,
+            success: function (data) {
+                console.log(data);
+                friendlist = data;
+                showFriend(friendlist);
+            }
+        });
+    }
+    function showFriend(friendlist){
+        $("#friendlist").html("");    //清空好友列表
+        $.each(friendlist, function(index, item){     //添加私聊按钮
+            var li = "<li>"+item+"</li>";
+            if('${userid}' != item){    //排除自己
+                li = "<li class='friendlist'><img onclick=\"addChat('"+item+"')\" width='40px' height='40px' class='avatar' src='${ctx}/static/source/img/bg1.jpg'>"+item+" <button class=\"delete-btn\"  onclick=\"deleteFriend('"+item+"')\"></button></li>" ;
+            }
+            $("#friendlist").append(li);
+        });
+        $("#friendnum").text($("#friendlist li").length);     //获取好友人数
+    }
+    
+    function deleteFriend(friendid) {
+        $.ajax({
+            type: 'POST',
+            url: '${ctx}/friend/deleteFriend?userid=${userid}&friendid='+friendid,
+            // data: data,
+            success: function (data) {
+                getFriendList();
+            }
+        });
+    }
     /**
      * 图灵机器人
      * @param message
@@ -303,6 +352,20 @@
         var date = new Date();
         var currentdate = date.getFullYear() + "-" + appendZero(date.getMonth() + 1) + "-" + appendZero(date.getDate()) + " " + appendZero(date.getHours()) + ":" + appendZero(date.getMinutes()) + ":" + appendZero(date.getSeconds());
         return currentdate;
+    }
+
+    /**
+     * 添加好友
+     */
+    function addFriend() {
+        layer.open({
+            type: 2,
+            title: '添加好友',
+            offset: '100px',
+            area: ['800px', '400px'],
+            shade:false,
+            content: '${ctx}/friend/addFriend'
+        });
     }
 </script>
 </body>
