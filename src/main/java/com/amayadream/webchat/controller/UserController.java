@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * NAME   :  WebChat/com.amayadream.webchat.controller
@@ -168,5 +170,16 @@ public class UserController {
             e.printStackTrace();
         }
     }
+/**
+ * 获取单个用户信息
+ */
+@RequestMapping(value = "{userid}/showuserinfo",method = RequestMethod.POST)
+    @ResponseBody
+    public List<User> showuserinfo(@PathVariable("userid") String userid){
+    List<User> users = new ArrayList<>();
+    users.add(userService.selectUserByUserid(userid));
+    return  users;
+}
+
 
 }

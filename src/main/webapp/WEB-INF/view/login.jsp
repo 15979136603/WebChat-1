@@ -40,6 +40,11 @@
       <input type="button" id="button" value="Register" onclick="resgister()" >
     </div>
   </form>
+  <form id="Visitorlogin" action="<%=path%>/user/visitorlogin">
+    <div class="signin">
+      <input type="button" id="Visitorloginbutton" value="Visitorlogin" onclick="Visitorlogin()" >
+    </div>
+  </form>
 </div>
 
 <script>
@@ -47,7 +52,9 @@
       $("#register").submit();
       //window.location.href="register";
   }
-
+function Visitorlogin(){
+    $("#Visitorlogin").submit();
+}
   $(function(){
     <c:if test="${not empty param.timeout}">
       layer.msg('连接超时,请重新登陆!', {

@@ -7,6 +7,59 @@
     <title>WebChat | 聊天</title>
     <jsp:include page="include/commonfile.jsp"/>
     <script src="${ctx}/static/plugins/sockjs/sockjs.js"></script>
+    <style>
+        .personal-info-title {
+            font-size: 22.5px;
+            margin-top: 65px;
+        }
+        .personal-info {
+            list-style: none;
+            padding: 0;
+        }
+        ul.personal-info li {
+            margin-bottom: 9px;
+            padding-left: 75px;
+            position: relative;
+            font-size: 12.5px;
+        }
+        .personal-info span {
+            background: #111111;
+            padding: 4px 10px 5px;
+            color: #fff;
+            display: inline-block;
+            margin-left: 9px;
+            text-transform: capitalize;
+        }
+
+        .personal-info label {
+            position: absolute;
+            left: 0;
+            width: 75px;
+            top: 0;
+            bottom: 0;
+            min-width: 75px;
+            font-size: 12.5px;
+            font-weight: 600;
+            background: #f4d03f;
+            margin-right: 10px;
+            padding: 4px 10px 5px;
+            margin: 0;
+        }
+        .description {
+            height: 300px;
+            position: relative;
+            background-color: #fff;
+            padding: 10px 30px;
+            overflow: hidden;
+        }
+
+        .description p {
+            margin: 0px 0px;
+            padding-right: 75px;
+        }
+
+        #msg-box { border: 1px solid black; width: 500px; height: 350px; display: none; float: left; padding: 10px }
+    </style>
 </head>
 <body>
 <jsp:include page="include/header.jsp"/>
@@ -17,8 +70,20 @@
     <div class="admin-content">
         <input type="hidden" id="userid" value=<%=request.getSession().getAttribute("userid")%>/>
         <div class="" style="width: 80%;float:left;">
+            <div id="msg-box"style="float: right;position: absolute;z-index: 1">
+                <div class="description hidden">
+                    <h3 class="personal-info-title title">Personal Info</h3>
+                    <ul class="personal-info">
+                        <li class="rotate-out rotated"><label>Name</label>&nbsp;&nbsp;<span id="userinfoname"></span></li>
+                        <li class="rotate-out rotated"><label>Sex</label>&nbsp;&nbsp;<span id="userinfosex"></span></li>
+                        <li class="rotate-out rotated"><label>Email</label>&nbsp;&nbsp;<span id="userinfoemail"></span></li>
+                        <li class="rotate-out rotated"><label>profile</label>&nbsp;&nbsp;<span id="userinfoprofile"></span></li>
+
+                    </ul>
+                </div>
+            </div>
             <!-- 聊天区 -->
-            <div class="am-scrollable-vertical" id="chat-view" style="height: 510px;">
+            <div class="am-scrollable-vertical" id="chat-view" style="height: 510px;z-index: -1;">
                 <ul class="am-comments-list am-comments-list-flip" id="chat">
                 </ul>
             </div>
@@ -61,10 +126,11 @@
             </div>
         </div>
         <!-- 列表区 -->
-        <div class="am-panel am-panel-default" style="float:right;width: 20%;">
+        <div class="am-panel am-panel-default" id="onlinelist" style="float:right;width: 20%;">
             <div class="am-panel-hd">
                 <h3 class="am-panel-title">在线列表 [<span id="onlinenum"></span>]</h3>
             </div>
+
             <ul class="am-list am-list-static am-list-striped">
                 <li>图灵机器人
                     <button class="am-btn am-btn-xs am-btn-danger" id="tuling" data-am-button>未上线</button>
@@ -206,7 +272,7 @@
         if (secondperson != "全体成员" && firstperson != null) {
             $.ajax({
                 type: 'post',
-                url: '/chatrecord/search/'+firstperson+'/'+secondperson,
+                url: '/chatrecord/search/' + firstperson + '/' + secondperson,
                 success: function (data) {
                     clearConsole();
                     var json = eval(data)
@@ -238,7 +304,7 @@
     }
 
     /**
-     *
+     *删除聊天记录
      **/
     function deletechatRecord() {
         var secondperson = $("#sendto").text();
@@ -248,7 +314,7 @@
         $.ajax({
             type: 'post',
             url: '${ctx}/chatrecord/deleterecord/' + firstperson + '/' + secondperson,
-            success:function () {
+            success: function () {
                 console.log(删除成功);
             }
         });
@@ -356,12 +422,53 @@
         $.each(list, function (index, item) {     //添加私聊按钮
             var li = "<li>" + item + "</li>";
             if ('${userid}' != item) {    //排除自己
-                li = "<li>" + item + " <button type=\"button\" class=\"am-btn am-btn-xs am-btn-primary am-round\" onclick=\"addChat('" + item + "');\"><span class=\"am-icon-phone\"><span> 私聊</button></li>";
+                li = "<li>" + "<img onmouseover=\"showmes('" + item + "');\" onmouseout=\"hidemes();\" width=\"48\" height=\"48\" class=\"am-comment-avatar\" alt=\"\" src=\"${ctx}/upload/webchat/" + item + "/" + item + ".jpg\">" + item + " <button type=\"button\" class=\"am-btn am-btn-xs am-btn-primary am-round\" onclick=\"addChat('" + item + "');\"><span class=\"am-icon-phone\"><span> 私聊</button></li>";
             }
             $("#list").append(li);
         });
         $("#onlinenum").text($("#list li").length);     //获取在线人数
     }
+
+    /**
+     * 迷你资料卡展示信息
+     * */
+    function showmes(data) {
+        var width = $("#onlinelist").width();
+        $("#msg-box").css("right",width);
+        $.ajax({
+            type: 'post',
+            url: ${ctx}data+'/showuserinfo' ,
+            success: function (mes) {
+                var json = eval(mes);
+                $.each(json, function (index, item) {
+                    var userid = json[index].userid;
+                    var sex = json[index].sex;
+                    var email = json[index].email;
+                    var profile = json[index].profile;
+                    document.getElementById("userinfoname").innerHTML = userid;
+                    //$("#userinfoname").style.backgroundColor = 'red';
+
+if (sex==1){
+    document.getElementById("userinfosex").innerHTML = '男';
+} else if(sex==2){
+    document.getElementById("userinfosex").innerHTML = '女';
+}else{
+    document.getElementById("userinfosex").innerHTML = '未知';
+}
+                    document.getElementById("userinfoemail").innerHTML = email;
+                    document.getElementById("userinfoprofile").innerHTML = profile;
+
+            });
+        }
+        })
+        $("#msg-box").toggle();
+    }
+/**
+ *
+ * */
+    function hidemes() {
+    $("#msg-box").toggle();
+}
 
     /**
      * 图灵机器人
@@ -390,9 +497,10 @@
      */
     function addChat(user) {
         var sendto = $("#sendto");
+
         var receive = sendto.text() == "全体成员" ? "" : sendto.text() + ",";
         if (receive.indexOf(user) == -1) {    //排除重复
-            sendto.text(receive + user);
+            sendto.text(user);
         }
     }
 

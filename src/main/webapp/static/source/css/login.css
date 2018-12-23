@@ -29,7 +29,8 @@ img{max-width:100%;}
 /*end reset*/
 /****-----start-body----****/
 body{
-	background: url(../img/bg5.jpg) no-repeat 0px 0px;
+	background: url(../img/bg1.jpg) no-repeat 0px 0px;
+
 	font-family: 'Open Sans', sans-serif;
 	background-size:cover;
 	-webkit-background-size:cover;
@@ -176,7 +177,7 @@ input[type="submit"]:hover {
 	-o-transition: 1s all;
 }
 
-input[type="button"]{
+input[id="Visitorloginbutton"]{
 	font-size: 30px;
 	color: #fff;
 	outline: none;
@@ -190,6 +191,24 @@ input[type="button"]{
 	-webkit-border-bottom-right-radius: 15px;
 	-moz-border-bottom-right-radius: 15px;
 	-o-border-bottom-right-radius: 15px;
+	width: 100%;
+	padding: 18px 0;
+	cursor: pointer;
+}
+input[id="button"]{
+	font-size: 30px;
+	color: #fff;
+	outline: none;
+	border: none;
+	background: #3ea751;
+	/*border-bottom-left-radius: 15px;*/
+	/*-webkit-border-bottom-left-radius: 15px;*/
+	/*-moz-border-bottom-left-radius: 15px;*/
+	/*-o-border-bottom-left-radius: 15px;*/
+	/*border-bottom-right-radius: 15px;*/
+	/*-webkit-border-bottom-right-radius: 15px;*/
+	/*-moz-border-bottom-right-radius: 15px;*/
+	/*-o-border-bottom-right-radius: 15px;*/
 	width: 100%;
 	padding: 18px 0;
 	cursor: pointer;

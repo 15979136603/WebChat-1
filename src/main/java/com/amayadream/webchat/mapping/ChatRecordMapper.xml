@@ -15,4 +15,14 @@
     DELETE FROM chatrecord
     WHERE firstperson = #{0, jdbcType=VARCHAR} and secondperson = #{1, jdbcType=VARCHAR}
 </delete>
+
+    <delete id="deleteChatRecordByFirstPerson">
+        DELETE FROM chatrecord
+    WHERE firstperson = #{firstperson, jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteChatRecordBySecondPerson">
+        DELETE FROM chatrecord
+    WHERE secondperson = #{secondperson, jdbcType=VARCHAR}
+    </delete>
 </mapper>
