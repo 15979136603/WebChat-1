@@ -28,6 +28,8 @@
             <mvc:mapping path="/**"/>
             <!-- 需要排除拦截的地址 -->
             <mvc:exclude-mapping path="/static/**"/>
+            <mvc:exclude-mapping path="/file/**"/>
+            <mvc:exclude-mapping path="/upload/**"/>
             <bean id="loginInterceptor" class="com.amayadream.webchat.interceptor.LoginInterceptor">
                 <property name="IGNORE_URI">
                     <list>
@@ -44,6 +46,8 @@
 
     <!-- 静态资源映射 -->
     <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:resources mapping="/file/**" location="/file/"/>
+    <!--<mvc:resources mapping="/upload/**" location="/upload/"/>-->
 
     <mvc:resources location="/" mapping="/**/*.html"/>
     <mvc:resources location="/" mapping="/**/*.js"/>

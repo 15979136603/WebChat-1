@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.amayadream.webchat.dao.ChatRecordDao">
+
+    <select id="searchChatRecord" resultType="com.amayadream.webchat.pojo.ChatRecord">
+        select * from chatrecord where firstperson = #{firstperson} and secondperson = #{secondperson}
+    </select>
+
+    <insert id="insertChatRecordByid">
+        INSERT INTO chatrecord (firstperson , secondperson, content , state , time)
+    VALUES (#{firstperson},#{secondperson},#{content},#{state},#{time})
+    </insert>
+
+<delete id="deleteChatRecordByid" >
+    DELETE FROM chatrecord
+    WHERE firstperson = #{0, jdbcType=VARCHAR} and secondperson = #{1, jdbcType=VARCHAR}
+</delete>
+</mapper>
