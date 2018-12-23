@@ -80,7 +80,6 @@
                         <li class="rotate-out rotated"><label>Sex</label>&nbsp;&nbsp;<span id="userinfosex"></span></li>
                         <li class="rotate-out rotated"><label>Email</label>&nbsp;&nbsp;<span id="userinfoemail"></span></li>
                         <li class="rotate-out rotated"><label>profile</label>&nbsp;&nbsp;<span id="userinfoprofile"></span></li>
-
                     </ul>
                 </div>
             </div>
@@ -434,7 +433,7 @@
         $.each(list, function(index, item){     //添加私聊按钮
             var li = "<li>"+item+"</li>";
             if('${userid}' != item){    //排除自己
-                li = "<li><img onmouseover=\"showmes('\" + item + \"');\" onmouseout=\"hidemes();\" width='40px' height='40px' class='am-comment-avatar' src=\"${ctx}/upload/webchat/" + item + "/" + item + ".jpg\">"+item+" <button type=\"button\" class=\"am-btn am-btn-xs am-btn-primary am-round\" onclick=\"addChat('"+item+"');\"><span class=\"am-icon-phone\"><span> 私聊</button></li>";
+                li = "<li><img onmouseover=\"showmes('" + item + "');\" onmouseout=\"hidemes();\" width='40px' height='40px' class='am-comment-avatar' src=\"${ctx}/upload/webchat/" + item + "/" + item + ".jpg\" >"+item+" <button type=\"button\" class=\"am-btn am-btn-xs am-btn-primary am-round\" onclick=\"addChat('"+item+"');\"><span class=\"am-icon-phone\"><span> 私聊</button></li>";
 
             }
             $("#list").append(li);
@@ -458,12 +457,21 @@
             }
         });
     }
+    /**
+     * 跳转至用户个人信息界面
+     */
+    function showUser(userId) {
+        window.location.href="${ctx} /info/"+userId;
+    }
     function showFriend(friendlist){
         $("#friendlist").html("");    //清空好友列表
         $.each(friendlist, function(index, item){     //添加私聊按钮
             var li = "<li>"+item+"</li>";
             if('${userid}' != item){    //排除自己
-                li = "<li class='friendlist'><img onclick=\"addChat('"+item+"')\" width='40px' height='40px' class='avatar' src='${ctx}/static/source/img/bg1.jpg'>"+item+" <button class=\"delete-btn\"  onclick=\"deleteFriend('"+item+"')\"></button></li>" ;
+                li = "<li class='friendlist'><img onmouseover=\"showmes('" + item + "');\" onmouseout=\"hidemes();\""+" onclick=\"addChat('"+item
+                    +"')\" width='40px' height='40px' class='avatar' src=\"${ctx}/upload/webchat/" + item + "/" + item + ".jpg\">"
+                    +"<span "+"onclick=\"showUser('"+item+"');\"" +">"+item+"</span>"+" <button class=\"delete-btn\" " +
+                    " onclick=\"deleteFriend('"+item+"')\"></button></li>" ;
             }
             $("#friendlist").append(li);
         });

@@ -119,8 +119,8 @@
                     for(var i=0;i<data.length;i++) {
                         $(".bottom").append("        <div class=\"user\">\n" +
                             "            <a><img class=\"am-comment-avatar\" src=\"../../static/source/img/avtar.png\"></a>\n" +
-                            "            <p id=\"username\">"+data[i].nickname+"</p>\n" +
-                            "            <button class=\"add-friend-btn\" onclick=\"addFriend("+"'"+data[i].nickname+"'"+")\">添加好友</button>\n" +
+                            "            <p id=\"username\">"+data[i].userid+"</p>\n" +
+                            "            <button class=\"add-friend-btn\" onclick=\"addFriend("+"'"+data[i].userid+"'"+")\">添加好友</button>\n" +
                             "        </div>");
                     }
                 }
